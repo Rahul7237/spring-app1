@@ -32,7 +32,7 @@ public class UserService {
 
     public void saveUser(User user) throws MessagingException {
         userRepository.save(user);
-       // Mail.SendMail(user.getEmail());
+        Mail.SendMail(user.getEmail());
     }
 
 
