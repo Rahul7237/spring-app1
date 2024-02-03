@@ -1,7 +1,7 @@
 FROM openjdk:8-jdk AS build
 
 RUN apt-get update && \
-    apt-get install -y curl
+    apt-get install -y curl zip
 
 # Download and install Gradle
 RUN curl -s "https://get.sdkman.io" | bash
