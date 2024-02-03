@@ -10,6 +10,6 @@ FROM openjdk:8-jdk-slim
 
 EXPOSE 8080
 
-COPY --from=build /app/build/libs/Overflow-0.0.1-SNAPSHOT.jar app.jar
+COPY --from=build /app/build/libs/Overflow-1.jar app.jar
 
 ENTRYPOINT ["java", "-jar", "app.jar"]
