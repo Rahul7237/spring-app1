@@ -42,35 +42,62 @@ public class QuestionController {
     public ResponseEntity<List<Answer>> getAnsByQuesId(@PathVariable Integer id) {
         try {
             List<Answer> answerList = new ArrayList<>();
-            Question question = questionService.getById(id);
-            String answerIds = question.getAnswerId();
-            String[] answerIdArray = answerIds.split(",");
-            for(String ansId : answerIdArray){
-                Answer answer = answerService.getById(Integer.valueOf(ansId));
-                answerList.add(answer);
 
+            // Retrieve the question
+            Question question = questionService.getById(id);
+
+            // Check if the question is null
+            if (question == null) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
 
-            return new ResponseEntity<List<Answer>>(answerList, HttpStatus.OK);
+            String answerIds = question.getAnswerId();
+
+            // Check if answerIds is null or empty
+            if (answerIds != null && !answerIds.isEmpty()) {
+                System.out.println(answerIds + " line number 47");
+
+                // Split answerIds and retrieve answers
+                String[] answerIdArray = answerIds.split(",");
+                for (String ansId : answerIdArray) {
+                    // Check if ansId is null or empty
+                    if (ansId != null && !ansId.isEmpty()) {
+                        Answer answer = answerService.getById(Integer.valueOf(ansId));
+
+                        // Check if answer is null before adding to the list
+                        if (answer != null) {
+                            answerList.add(answer);
+                        }
+                    }
+                }
+            }
+
+            return new ResponseEntity<>(answerList, HttpStatus.OK);
+        } catch (NumberFormatException e) {
+            // Handle the case where conversion to Integer fails
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } catch (NoSuchElementException e) {
-            return new ResponseEntity<List<Answer>>(HttpStatus.NOT_FOUND);
+            // Handle the case where the question is not found
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
     @PostMapping("/addAns")
     public Answer addAns(@RequestBody AnswerRequest answer) {
         try {
             // Retrieve the corresponding question
+            System.out.println("sput" + answer);
             Question question = questionService.getById(answer.getQuesId());
-
+            User user = userService.getUser(Integer.valueOf(answer.getUserId()));
             // Create and save the answer
             Answer ans = new Answer();
             Date createDate = new Date();
             ans.setAnswer_desc(answer.getAnsDesc());
             ans.setCreateDate(createDate);
-            ans.setFirstName(question.getFirstName());
-            ans.setLastName(question.getLastName());
+            ans.setFirstName(user.getfirstName());
+            ans.setLastName(user.getlastName());
             ans.setQuesId(question.getId());
-            ans.setUserId(Integer.valueOf(question.getUserId()));
+            ans.setUserId(user.getId());
             ans.setQuest_desc(question.getQuesDesc());
             answerService.saveAns(ans);
 
