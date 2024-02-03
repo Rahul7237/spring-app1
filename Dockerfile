@@ -17,10 +17,10 @@ WORKDIR /app
 COPY . .
 
 # Make sure the Gradle wrapper script is executable
-RUN chmod +x ./gradlew
+#RUN chmod +x ./gradlew
 
 # Run Gradle build
-RUN ./gradlew bootJar --no-daemon
+#RUN ./gradlew bootJar --no-daemon
 
 FROM openjdk:8-jdk-slim
 
