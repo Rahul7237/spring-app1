@@ -1,32 +1,14 @@
-FROM openjdk:8-jdk AS build
+FROM ubuntu:latest AS build
 
-# Install curl, zip, and unzip
-RUN apt-get update && \
-    apt-get install -y curl zip unzip
-
-# Install SDKMAN
-RUN curl -s "https://get.sdkman.io" | bash
-RUN echo "source \"$HOME/.sdkman/bin/sdkman-init.sh\"" >> "$HOME/.bashrc"
-SHELL ["/bin/bash", "-c"]
-
-# Install Gradle using SDKMAN
-RUN source "$HOME/.sdkman/bin/sdkman-init.sh" && sdk install gradle
-
-WORKDIR /app
-
+RUN apt-get update
+RUN apt-get install openjdk-8-jdk -y
 COPY . .
 
-# Make sure the Gradle wrapper script is executable
-#RUN chmod +x ./gradlew
-
-# Run Gradle build
-#RUN ./gradlew bootJar --no-daemon
+RUN ./gradlew bootJar --no-daemon
 
 FROM openjdk:8-jdk-slim
 
 EXPOSE 8080
-
-WORKDIR /app
 
 COPY --from=build /app/build/libs/Overflow-0.0.1-SNAPSHOT.jar app.jar
 
