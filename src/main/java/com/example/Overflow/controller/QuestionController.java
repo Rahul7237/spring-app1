@@ -99,6 +99,9 @@ public class QuestionController {
             ans.setQuesId(question.getId());
             ans.setUserId(user.getId());
             ans.setQuest_desc(question.getQuesDesc());
+            ans.setLatitude(answer.getLatitude());
+            ans.setLocation(answer.getAddress());
+            ans.setLongitude(answer.getLongitude());
             answerService.saveAns(ans);
 
             // Update the answerIds of the question
@@ -150,7 +153,9 @@ public class QuestionController {
             ques.setUserId(String.valueOf(user.getId()));
             Date createDate = new Date();
             ques.setCreateDate(createDate);
-
+             ques.setLatitude(askQuestionModel.getLatitude());
+             ques.setLongitude(askQuestionModel.getLongitude());
+             ques.setLocation(askQuestionModel.getAddress());
             System.out.println("adding ques" + ques.getUserId() + ques.getQuesDesc() + ques.getQuesDesc());
 
             questionService.saveQues(ques);
