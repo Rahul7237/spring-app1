@@ -45,7 +45,7 @@ class SecurityConfig extends WebSecurityConfigurerAdapter {
             httpSecurity.cors().and() // Enable CORS and integrate with Spring Security
                     .csrf().disable()
                     .authorizeRequests()
-                    .antMatchers("/authenticate","/signUp").permitAll()
+                    .antMatchers("/authenticate","/signUp","/forgotPass").permitAll()
                     .anyRequest().authenticated()
                     .and()
                     .exceptionHandling()

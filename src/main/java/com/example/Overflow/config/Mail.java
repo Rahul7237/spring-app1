@@ -14,7 +14,12 @@ public class Mail {
         mail.draftEmail(email);
         mail.sendEmail();
     }
-
+    public static void SendOtpMail(String email, String otp) throws MessagingException {
+        Mail mail = new Mail();
+        mail.setupServerProperties();
+        mail.draftOtpMail(email, otp);
+        mail.sendEmail();
+    }
     private void sendEmail() throws MessagingException {
         String fromUser = "prefinal19@gmail.com";
         String fromUserPassword = "bkpr czor otkv vgvk"; // Replace with your Gmail password
@@ -40,9 +45,30 @@ public class Mail {
         System.out.println("Email successfully sent!");
     }
 
+    private MimeMessage draftOtpMail(String email, String otp) throws MessagingException {
+        String[] emailRecipients = {email};
+        String emailSubject = "OTP";
+        mineMessage = new MimeMessage(newSession);
+
+        for (int i = 0; i < emailRecipients.length; i++) {
+            mineMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(emailRecipients[i]));
+        }
+        mineMessage.setSubject(emailSubject);
+
+        MimeBodyPart bodyPart = new MimeBodyPart();
+        String emailBody = getOTPtemplate(otp);
+        bodyPart.setContent(emailBody, "text/html");
+
+        MimeMultipart multiPart = new MimeMultipart();
+        multiPart.addBodyPart(bodyPart);
+        mineMessage.setContent(multiPart);
+
+        return mineMessage;
+
+    }
     private MimeMessage draftEmail( String email) throws AddressException, MessagingException {
         String[] emailRecipients = {email};
-        String emailSubject = "Test Mail";
+        String emailSubject = "New user sign-up";
        // String emailBody = "Test body of my email Hello from test new updates";
         mineMessage = new MimeMessage(newSession);
 
@@ -167,5 +193,62 @@ public class Mail {
                 "</body>\n" +
                 "</html>";
         return  emailTemplate;
+    }
+
+    public static String getOTPtemplate(String otp) {
+        return "<!DOCTYPE html>\n" +
+                "<html>\n" +
+                "<head>\n" +
+                "    <meta charset=\"UTF-8\">\n" +
+                "    <title>OTP Email</title>\n" +
+                "    <style>\n" +
+                "        body {\n" +
+                "            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;\n" +
+                "            background-color: #f5f5f5;\n" +
+                "            margin: 0;\n" +
+                "            padding: 0;\n" +
+                "            box-sizing: border-box;\n" +
+                "        }\n" +
+                "        .container {\n" +
+                "            text-align: center;\n" +
+                "            padding: 30px;\n" +
+                "            background-color: #ffffff;\n" +
+                "            border-radius: 10px;\n" +
+                "            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);\n" +
+                "        }\n" +
+                "        h1 {\n" +
+                "            text-align: center;\n" +
+                "            color: #3498db;\n" +
+                "        }\n" +
+                "        p {\n" +
+                "            font-size: 18px;\n" +
+                "            line-height: 1.6;\n" +
+                "            color: #333;\n" +
+                "            margin-top: 10px;\n" +
+                "        }\n" +
+                "        .otp {\n" +
+                "            display: inline-block;\n" +
+                "            padding: 8px 20px;\n" +
+                "            background-color: #3498db;\n" +
+                "            color: #fff;\n" +
+                "            font-size: 20px;\n" +
+                "            border-radius: 5px;\n" +
+                "            margin-top: 10px;\n" +
+                "        }\n" +
+                "    </style>\n" +
+                "</head>\n" +
+                "<body>\n" +
+                "\n" +
+                "    <div class=\"container\">\n" +
+                "        <h1>Your OTP Code</h1>\n" +
+                "        <p>Hello,</p>\n" +
+                "        <p>Your OTP code for verification is: </p>\n" +
+                "        <div class=\"otp\">"+ otp+"</div>\n" +
+                "        <p>This OTP is valid for a short period of time. Please enter it on the verification page to complete the process.</p>\n" +
+                "        <p>If you didn't request this OTP, please ignore this email.</p>\n" +
+                "    </div>\n" +
+                "\n" +
+                "</body>\n" +
+                "</html>";
     }
 }

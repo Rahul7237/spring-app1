@@ -14,6 +14,8 @@ public class RestConfig {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
         config.addAllowedOrigin("https://react-overflow.vercel.app"); // React app is running at this address
+        config.addAllowedOrigin("http://localhost:3000");
+        config.addAllowedOrigin("https://overflow-hub.vercel.app");
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

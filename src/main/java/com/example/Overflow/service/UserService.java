@@ -35,13 +35,28 @@ public class UserService {
         Mail.SendMail(user.getEmail());
     }
 
-
     public User getUser(Integer id) {
         return userRepository.findById(id).get();
     }
 
     public void deleteUser(Integer id) {
         userRepository.deleteById(id);
+    }
+
+    public void updateUser(User newUser) {
+        Optional<User> optionalUser = userRepository.findById(newUser.getId());
+        if (optionalUser.isPresent()) {
+            User existingUser = optionalUser.get();
+            existingUser.setfirstName(newUser.getfirstName());
+            existingUser.setlastName(newUser.getlastName());
+            existingUser.setEmail(newUser.getEmail());
+            existingUser.setMobile(newUser.getMobile());
+            // Update any other fields as needed
+
+            userRepository.save(existingUser);
+        } else {
+            throw new IllegalArgumentException("User with id " + newUser.getId() + " not found");
+        }
     }
 }
 
