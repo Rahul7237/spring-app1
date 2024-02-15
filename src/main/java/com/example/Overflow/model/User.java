@@ -18,7 +18,7 @@ private Date createDate;
 
     private  String email;
     private  String password;
-
+    private  String otp;
     public String getPassword() {
         return password;
     }
@@ -49,6 +49,14 @@ private Date createDate;
         this.createDate = createDate;
     }
     public User() {
+    }
+
+    public String getOtp() {
+        return otp;
+    }
+
+    public void setOtp(String otp) {
+        this.otp = otp;
     }
 
     public User(int id, String firstName, String lastName) {

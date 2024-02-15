@@ -17,19 +17,16 @@ public class MyUserDetailsService implements UserDetailsService {
     UserService userService;
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        com.example.Overflow.model.User user = null;
         try {
-             user = userService.findUserByEmail(s);
-            System.out.println("getting user");
-             String userName = user.getEmail();
-             String password = decrypt(user.getPassword());
-            System.out.println(userName + password);
+            com.example.Overflow.model.User user = userService.findUserByEmail(s);
+            if (user == null) {
+                throw new UsernameNotFoundException("User not found");
+            }
+            String userName = user.getEmail();
+            String password = decrypt(user.getPassword());
             return new User(userName, password, new ArrayList<>());
+        } catch (Exception e) {
+            throw new UsernameNotFoundException("Error loading user by username", e);
         }
-        catch (Exception e){
-            e.printStackTrace();
-
-        }
-            return  null;
     }
 }
