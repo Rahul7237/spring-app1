@@ -8,10 +8,10 @@ public class Mail {
     Session newSession = null;
     MimeMessage mineMessage = null;
 
-    public static void SendMail(String email) throws MessagingException {
+    public static void SendMail(String email, String name) throws MessagingException {
         Mail mail = new Mail();
         mail.setupServerProperties();
-        mail.draftEmail(email);
+        mail.draftEmail(email,name);
         mail.sendEmail();
     }
     public static void SendOtpMail(String email, String otp) throws MessagingException {
@@ -66,7 +66,7 @@ public class Mail {
         return mineMessage;
 
     }
-    private MimeMessage draftEmail( String email) throws AddressException, MessagingException {
+    private MimeMessage draftEmail( String email, String name) throws AddressException, MessagingException {
         String[] emailRecipients = {email};
         String emailSubject = "New user sign-up";
        // String emailBody = "Test body of my email Hello from test new updates";
@@ -79,7 +79,7 @@ public class Mail {
         mineMessage.setSubject(emailSubject);
 
         MimeBodyPart bodyPart = new MimeBodyPart();
-        String emailBody = getBody(email);
+        String emailBody = getBody(name);
         bodyPart.setContent(emailBody, "text/html");
 
         MimeMultipart multiPart = new MimeMultipart();

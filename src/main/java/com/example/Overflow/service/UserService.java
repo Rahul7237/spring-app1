@@ -32,7 +32,18 @@ public class UserService {
 
     public void saveUser(User user) throws MessagingException {
         userRepository.save(user);
-        Mail.SendMail(user.getEmail());
+        String lastName = "";
+        String firstName = "";
+        try{
+            firstName = user.getfirstName();
+            lastName = user.getlastName();
+        }
+        catch (Exception e){
+            System.out.println("error while getting last name");
+        }
+
+        String name = firstName + " " + lastName;
+        Mail.SendMail(user.getEmail(),name);
     }
 
     public User getUser(Integer id) {
